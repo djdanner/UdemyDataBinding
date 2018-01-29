@@ -1,7 +1,7 @@
 <div>
   <button
     class="btn btn-primary"
-    (click)="getQuotes()">Get Quotes
+    (click)="getQuotesAndProccesThem()">Get Quotes
   </button>
 </div>
 
@@ -12,28 +12,38 @@
         <th>Name</th>
         <th>Symbol</th>
         <th>Price</th>
-        <th>% 24 Hour Change</th>
+        <th>24 Hr Chg %</th>
+        <th>LastUpdate</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>{{ btc_name }}</td>
-        <td>{{ btc_symbol }}</td>
-        <td>{{ btc_price_usd }}</td>
-        <td>{{ btc_percent_change_24h }}</td>
+        <td>{{ xrpQuote?.name }}</td>
+        <td>{{ xrpQuote?.symbol }}</td>
+        <td>{{ xrpQuote?.price_usd }}</td>
+        <td>{{ xrpQuote?.percent_change_24h }}</td>
+        <td>{{ xrpQuote?.last_updated * 1000 | date:'yyyy-MM-dd __ HH:mm:ss Z'}}</td>
       </tr>
       <tr>
-        <td>{{ eth_name }}</td>
-        <td>{{ eth_symbol }}</td>
-        <td>{{ eth_price_usd }}</td>
-        <td>{{ eth_percent_change_24h }}</td>
+        <td>{{ adaQuote?.name }}</td>
+        <td>{{ adaQuote?.symbol }}</td>
+        <td>{{ adaQuote?.price_usd }}</td>
+        <td>{{ adaQuote?.percent_change_24h }}</td>
+        <td>{{ adaQuote?.last_updated * 1000 | date:'yyyy-MM-dd __ HH:mm:ss Z'}}</td>
       </tr>
       <tr>
-        <td>{{ btcObject?.name }}</td>
-        <td>aaa</td>
-        <td>aaa</td>
-        <td>aaa</td>
+        <td>{{ ethQuote?.name }}</td>
+        <td>{{ ethQuote?.symbol }}</td>
+        <td>{{ ethQuote?.price_usd }}</td>
+        <td>{{ ethQuote?.percent_change_24h }}</td>
+        <td>{{ ethQuote?.last_updated * 1000 | date:'yyyy-MM-dd __ HH:mm:ss Z'}}</td>
       </tr>
+      <!-- <tr>
+        <td>{{ ?.name }}</td>
+        <td>{{ ?.symbol }}</td>
+        <td>{{ ?.price_usd }}</td>
+        <td>{{ ?.percent_change_24h }}</td>
+      </tr> -->
     </tbody>
   </table>
 </div>

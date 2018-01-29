@@ -33,7 +33,9 @@ interface cmcResponseObject {
 export class StockquoteComponent implements OnInit {
 
   cmcUrls = [
-    "https://api.coinmarketcap.com/v1/ticker/",
+    // The first call gets the Top 10 currencies by Market Capitalization.
+    // The other ones get a specific crypto currency.
+    "https://api.coinmarketcap.com/v1/ticker/?limit=10",
     "https://api.coinmarketcap.com/v1/ticker/bitcoin/",
     "https://api.coinmarketcap.com/v1/ticker/ethereum/"
   ];
@@ -42,89 +44,63 @@ export class StockquoteComponent implements OnInit {
   // by cmc because one of the fields starts with a #, and the compiler
   // doesn't allow that!!!  So I denied this as type "any", so then
   // compiler will figure-out what it is, and it seems to work.
-  btcObject: any;
-  ethObject: any;
-  xrpObject: any;
-  adaObject: any;
+  btcQuote: any;
+  ethQuote: any;
+  xrpQuote: any;
+  adaQuote: any;
 
   fullResponse: any;
 
-  results: string[];
-  btcQuote:  cmcResponseObject;  // ??? do I need a "new"
-  symbol: string;
+  date = new Date(null);
 
-  btcSymbol: string;
-
-  btc_id:      string;
-  btc_name:    string;
-  btc_symbol:  string;
-  btc_rank:    string;
-  btc_price_usd:  string;
-  btc_price_btc:  string;
-  btc_24h_volume_usd:  string;  // I added an underscore - you can't begin a symbol with a number
-  btc_market_cap_usd:  string;
-  btc_available_supply:  string;
-  btc_total_supply:  string;
-  btc_percent_change_1h:  string;
-  btc_percent_change_24h:  string;
-  btc_percent_change_7d:  string;
-  btc_last_updated:  string;
-
-  eth_name:    string;
-  eth_symbol:  string;
-  eth_price_usd:  string;
-  eth_percent_change_24h:  string;
+  btcLastUpdateTime: any;
+  ethLastUpdateTime: any;
+  xrpLastUpdateTime: any;
+  adaLastUpdateTime: any;
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.getQuotes();
+    this.getQuotesAndProccesThem();
   }
 
-  getQuotes(){
+  processQuotes(){
+      // console.log(this.ethQuote);
+
+      // console.log(this.ethQuote.last_updated);
+      // console.log(this.btcQuote.last_updated);
+
+      this.date.setSeconds(this.xrpQuote.last_updated);
+      this.xrpLastUpdateTime = this.date.toISOString().substr(11, 8);
+
+      this.date.setSeconds(this.adaQuote.last_updated);
+      this.adaLastUpdateTime = this.date.toISOString().substr(11, 8);
+
+      this.date.setSeconds(this.ethQuote.last_updated);
+      this.ethLastUpdateTime = this.date.toISOString().substr(11, 8);
+  }
+
+  // I think that all processing of the quote data must be done in the context
+  // this function, because the get operation is asynchronous, so you
+  // don't know when it will return the data.
+  getQuotesAndProccesThem(){
     // Note that this.http is created in the Constructor()
     console.log("Clicked.");
     this.http.get(this.cmcUrls[0]).subscribe(response => {
-          // Read the specified field from the JSON response.
-          // console.log(response.headers.get('X-Custom-Header'));
-          // console.log(response.body);
-          console.log(response);   // *** THIS WORKS ***
-          this.results = response[0].name;
-          // this.btcQuote.name=response[0].name;
-          // this.btcQuote.symbol = response[0].symbol;
-          this.btcSymbol = response[0].symbol;
-          this.symbol = response[0].symbol;
 
-          this.btc_name = response[0].name;
-          this.btc_symbol = response[0].symbol;
-          this.btc_price_usd = response[0].price_usd;
-          this.btc_percent_change_24h = response[0].percent_change_24h;
+      this.btcQuote = response[0];
+      this.ethQuote = response[1];
+      this.xrpQuote = response[2];
+      this.adaQuote = response[4];
 
-          this.eth_name = response[1].name;
-          this.eth_symbol = response[1].symbol;
-          this.eth_price_usd = response[1].price_usd;
-          this.eth_percent_change_24h = response[1].percent_change_24h;
+      this.fullResponse = response;
 
-          this.btcObject = response[0];
-          this.ethObject = response[1];
-          this.xrpObject = response[2];
-          this.adaObject = response[4];
-
-          this.fullResponse = response;
-
-          // this.aaaObj = new cmcJasonResponseItem(response[3]);
-
-          // console.log(this.aaaObj);
-
-          console.log(this.fullResponse[0]);
-
-          // console.log(this.btcObject);
-
-          //this.results = response[0];
-        });
-
-    //console.log(this.results);
+      // console.log(response);
+      // console.log(this.fullResponse[0]);
+      this.processQuotes();
+    });
   }
+
 }
 
 // This WORKS 2 !!!
