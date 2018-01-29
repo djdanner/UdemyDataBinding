@@ -33,9 +33,21 @@ interface cmcResponseObject {
 export class StockquoteComponent implements OnInit {
 
   cmcUrls = [
+    "https://api.coinmarketcap.com/v1/ticker/",
     "https://api.coinmarketcap.com/v1/ticker/bitcoin/",
     "https://api.coinmarketcap.com/v1/ticker/ethereum/"
   ];
+
+  // I can't figure-out how to define a type for the JSON obj returned
+  // by cmc because one of the fields starts with a #, and the compiler
+  // doesn't allow that!!!  So I denied this as type "any", so then
+  // compiler will figure-out what it is, and it seems to work.
+  btcObject: any;
+  ethObject: any;
+  xrpObject: any;
+  adaObject: any;
+
+  fullResponse: any;
 
   results: string[];
   btcQuote:  cmcResponseObject;  // ??? do I need a "new"
@@ -57,6 +69,11 @@ export class StockquoteComponent implements OnInit {
   btc_percent_change_24h:  string;
   btc_percent_change_7d:  string;
   btc_last_updated:  string;
+
+  eth_name:    string;
+  eth_symbol:  string;
+  eth_price_usd:  string;
+  eth_percent_change_24h:  string;
 
   constructor(private http: HttpClient) { }
 
@@ -82,6 +99,26 @@ export class StockquoteComponent implements OnInit {
           this.btc_symbol = response[0].symbol;
           this.btc_price_usd = response[0].price_usd;
           this.btc_percent_change_24h = response[0].percent_change_24h;
+
+          this.eth_name = response[1].name;
+          this.eth_symbol = response[1].symbol;
+          this.eth_price_usd = response[1].price_usd;
+          this.eth_percent_change_24h = response[1].percent_change_24h;
+
+          this.btcObject = response[0];
+          this.ethObject = response[1];
+          this.xrpObject = response[2];
+          this.adaObject = response[4];
+
+          this.fullResponse = response;
+
+          // this.aaaObj = new cmcJasonResponseItem(response[3]);
+
+          // console.log(this.aaaObj);
+
+          console.log(this.fullResponse[0]);
+
+          // console.log(this.btcObject);
 
           //this.results = response[0];
         });
