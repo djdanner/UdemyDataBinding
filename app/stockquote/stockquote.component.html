@@ -17,6 +17,38 @@
       </tr>
     </thead>
     <tbody>
+      <tr *ngFor="let quote of quoteList">
+        <td>{{ quote.name }}</td>
+        <td>{{ quote.symbol }}</td>
+        <td>{{ quote.price_usd }}</td>
+        <td>{{ quote.percent_change_24h }}</td>
+        <td>{{ quote.last_updated * 1000 | date:'yyyy-MM-dd __ HH:mm:ss Z'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+This works 4!!!
+<div>
+  <button
+    class="btn btn-primary"
+    (click)="getQuotesAndProccesThem()">Get Quotes
+  </button>
+</div>
+
+<div class="container">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Symbol</th>
+        <th>Price</th>
+        <th>24 Hr Chg %</th>
+        <th>LastUpdate</th>
+      </tr>
+    </thead>
+    <tbody>
       <tr>
         <td>{{ xrpQuote?.name }}</td>
         <td>{{ xrpQuote?.symbol }}</td>
@@ -38,15 +70,33 @@
         <td>{{ ethQuote?.percent_change_24h }}</td>
         <td>{{ ethQuote?.last_updated * 1000 | date:'yyyy-MM-dd __ HH:mm:ss Z'}}</td>
       </tr>
-      <!-- <tr>
-        <td>{{ ?.name }}</td>
-        <td>{{ ?.symbol }}</td>
-        <td>{{ ?.price_usd }}</td>
-        <td>{{ ?.percent_change_24h }}</td>
-      </tr> -->
     </tbody>
   </table>
 </div>
+
+<div class="container">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Symbol</th>
+        <th>Price</th>
+        <th>24 Hr Chg %</th>
+        <th>LastUpdate</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let quote of quoteList">
+        <td>{{ quote.name }}</td>
+        <td>{{ quote.symbol }}</td>
+        <td>{{ quote.price_usd }}</td>
+        <td>{{ quote.percent_change_24h }}</td>
+        <td>{{ quote.last_updated * 1000 | date:'yyyy-MM-dd __ HH:mm:ss Z'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww -->
 
 <!-- wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 This works 2!!!

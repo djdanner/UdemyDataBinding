@@ -4,27 +4,6 @@ import { HttpClient } from '@angular/common/http';
 
 import { cmcJasonResponseItem } from '../shared/cmc-jason-response-item';
 
-interface cmcResponseInterface {
-  response: cmcJasonResponseItem[];
-}
-
-interface cmcResponseObject {
-   id:      string;
-   name:    string;
-   symbol:  string;
-   rank:    string;
-   price_usd:  string;
-   price_btc:  string;
-   _24h_volume_usd:  string;  // I added an underscore - you can't begin a symbol with a number
-   market_cap_usd:  string;
-   available_supply:  string;
-   total_supply:  string;
-   percent_change_1h:  string;
-   percent_change_24h:  string;
-   percent_change_7d:  string;
-   last_updated:  string;
-}
-
 @Component({
   selector: 'app-stockquote',
   templateUrl: './stockquote.component.html',
@@ -40,23 +19,8 @@ export class StockquoteComponent implements OnInit {
     "https://api.coinmarketcap.com/v1/ticker/ethereum/"
   ];
 
-  // I can't figure-out how to define a type for the JSON obj returned
-  // by cmc because one of the fields starts with a #, and the compiler
-  // doesn't allow that!!!  So I denied this as type "any", so then
-  // compiler will figure-out what it is, and it seems to work.
-  btcQuote: any;
-  ethQuote: any;
-  xrpQuote: any;
-  adaQuote: any;
-
+  quoteList: cmcJasonResponseItem[] = [];
   fullResponse: any;
-
-  date = new Date(null);
-
-  btcLastUpdateTime: any;
-  ethLastUpdateTime: any;
-  xrpLastUpdateTime: any;
-  adaLastUpdateTime: any;
 
   constructor(private http: HttpClient) { }
 
@@ -65,19 +29,26 @@ export class StockquoteComponent implements OnInit {
   }
 
   processQuotes(){
-      // console.log(this.ethQuote);
+    var j = 0;
 
-      // console.log(this.ethQuote.last_updated);
-      // console.log(this.btcQuote.last_updated);
+    for (var i = 0; i <= 4 ; i++){
 
-      this.date.setSeconds(this.xrpQuote.last_updated);
-      this.xrpLastUpdateTime = this.date.toISOString().substr(11, 8);
+      if ( (i==0) || (i==1) || (i==2) || (i==4) ){
+        // console.log(i, j);
+        var tempItem = new cmcJasonResponseItem();
 
-      this.date.setSeconds(this.adaQuote.last_updated);
-      this.adaLastUpdateTime = this.date.toISOString().substr(11, 8);
+        tempItem.name               = this.fullResponse[i].name;
+        tempItem.symbol             = this.fullResponse[i].symbol;
+        tempItem.price_usd          = this.fullResponse[i].price_usd;
+        tempItem.percent_change_24h = this.fullResponse[i].percent_change_24h;
+        tempItem.last_updated       = this.fullResponse[i].last_updated;
 
-      this.date.setSeconds(this.ethQuote.last_updated);
-      this.ethLastUpdateTime = this.date.toISOString().substr(11, 8);
+        this.quoteList[j] = tempItem;
+        j++;
+      }
+    }
+
+    // console.log(this.quoteList);
   }
 
   // I think that all processing of the quote data must be done in the context
@@ -88,11 +59,6 @@ export class StockquoteComponent implements OnInit {
     console.log("Clicked.");
     this.http.get(this.cmcUrls[0]).subscribe(response => {
 
-      this.btcQuote = response[0];
-      this.ethQuote = response[1];
-      this.xrpQuote = response[2];
-      this.adaQuote = response[4];
-
       this.fullResponse = response;
 
       // console.log(response);
@@ -102,8 +68,151 @@ export class StockquoteComponent implements OnInit {
   }
 
 }
+// This WORKS 4 !!!
+// wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+// wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+// wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+// import { Component, OnInit } from '@angular/core';
+// import { BrowserModule } from '@angular/platform-browser';
+// import { HttpClient } from '@angular/common/http';
+//
+// import { cmcJasonResponseItem } from '../shared/cmc-jason-response-item';
+//
+// @Component({
+//   selector: 'app-stockquote',
+//   templateUrl: './stockquote.component.html',
+//   styleUrls: ['./stockquote.component.css']
+// })
+// export class StockquoteComponent implements OnInit {
+//
+//   cmcUrls = [
+//     // The first call gets the Top 10 currencies by Market Capitalization.
+//     // The other ones get a specific crypto currency.
+//     "https://api.coinmarketcap.com/v1/ticker/?limit=10",
+//     "https://api.coinmarketcap.com/v1/ticker/bitcoin/",
+//     "https://api.coinmarketcap.com/v1/ticker/ethereum/"
+//   ];
+//
+//   //     {
+//   //         "id": "bitcoin",
+//   //         "name": "Bitcoin",
+//   //         "symbol": "BTC",
+//   //         "rank": "1",
+//   //         "price_usd": "573.137",
+//   //         "price_btc": "1.0",
+//   //         "24h_volume_usd": "72855700.0",
+//   //         "market_cap_usd": "9080883500.0",
+//   //         "available_supply": "15844176.0",
+//   //         "total_supply": "15844176.0",
+//   //         "percent_change_1h": "0.04",
+//   //         "percent_change_24h": "-0.3",
+//   //         "percent_change_7d": "-0.57",
+//   //         "last_updated": "1472762067"
+//
+//   //quoteList : cmcJasonResponseItem [];
+//
+//     // id:                 string;  // ex:
+//     // name:               string;  // ex:
+//     // symbol:             string;  // ex:
+//     // rank:               string;  // ex:
+//     // price_usd:          string;  // ex:
+//     // price_btc:          string;  // ex:
+//     // _24h_volume_usd:    string;   // I added an underscore - you can't begin a
+//     //                             // symbol with a number, but the JSON does.
+//     //                             // Don't know how to handle this.
+//     // market_cap_usd:             string;  // ex:
+//     // available_supply:   string;  // ex:
+//     // total_supply:       string;  // ex:
+//     // percent_change_1h:  string;  // ex:
+//     // percent_change_24h: string;  // ex:
+//     // percent_change_7d:  string;  // ex:
+//     // last_updated:       string;  // ex:
+//
+//   btcQuote: any;
+//   ethQuote: any;
+//   xrpQuote: any;
+//   adaQuote: any;
+//
+//   aaaTest: string;
+//
+//   // quoteList: any[];
+//   quoteList: cmcJasonResponseItem[] = [];
+//
+//   fullResponse: any;
+//
+//   constructor(private http: HttpClient) { }
+//
+//   ngOnInit() {
+//     this.getQuotesAndProccesThem();
+//   }
+//
+//   processQuotes(){
+//       // console.log(this.ethQuote);
+//       var j = 0;
+//
+//       for (var i = 0; i <= 4 ; i++){
+//
+//         if ( (i==0) || (i==1) || (i==2) || (i==4) ){
+//           // console.log(i, j);
+//           var tempItem = new cmcJasonResponseItem();
+//
+//           tempItem.name               = this.fullResponse[i].name;
+//           tempItem.symbol             = this.fullResponse[i].symbol;
+//           tempItem.price_usd          = this.fullResponse[i].price_usd;
+//           tempItem.percent_change_24h = this.fullResponse[i].percent_change_24h;
+//           tempItem.last_updated       = this.fullResponse[i].last_updated;
+//
+//           this.quoteList[j] = tempItem;
+//           j++;
+//         }
+//       }
+//
+//       console.log(this.quoteList);
+//
+//       // tempItem.name               = this.fullResponse[1].name;
+//       // tempItem.symbol             = this.fullResponse[1].symbol;
+//       // tempItem.price_usd          = this.fullResponse[1].price_usd;
+//       // tempItem.percent_change_24h = this.fullResponse[1].percent_change_24h;
+//       // tempItem.last_updated       = this.fullResponse[1].last_updated;
+//       //
+//       // this.quoteList[0] = tempItem;
+//       //
+//       // this.aaaTest = this.quoteList[0].name;
+//
+//       //this.quoteList[0].name = this.fullResponse[1].name;
+//       // this.quoteList[1] = this.fullResponse[2];
+//       // this.quoteList[2] = this.fullResponse[4];
+//       // this.quoteList[3] = this.fullResponse[0];
+//   }
+//
+//   // I think that all processing of the quote data must be done in the context
+//   // this function, because the get operation is asynchronous, so you
+//   // don't know when it will return the data.
+//   getQuotesAndProccesThem(){
+//     // Note that this.http is created in the Constructor()
+//     console.log("Clicked.");
+//     this.http.get(this.cmcUrls[0]).subscribe(response => {
+//
+//       this.btcQuote = response[0];
+//       this.ethQuote = response[1];
+//       this.xrpQuote = response[2];
+//       this.adaQuote = response[4];
+//
+//       this.fullResponse = response;
+//
+//       // console.log(response);
+//       // console.log(this.fullResponse[0]);
+//       this.processQuotes();
+//     });
+//   }
+//
+// }
+// wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+// wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+// wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 
-// This WORKS 2 !!!
+
+// This WORKS 3 !!!
 // wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 // wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 // wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
@@ -142,233 +251,69 @@ export class StockquoteComponent implements OnInit {
 // export class StockquoteComponent implements OnInit {
 //
 //   cmcUrls = [
+//     // The first call gets the Top 10 currencies by Market Capitalization.
+//     // The other ones get a specific crypto currency.
+//     "https://api.coinmarketcap.com/v1/ticker/?limit=10",
 //     "https://api.coinmarketcap.com/v1/ticker/bitcoin/",
 //     "https://api.coinmarketcap.com/v1/ticker/ethereum/"
 //   ];
 //
-//   results: string[];
-//   btcQuote:  cmcResponseObject;  // ??? do I need a "new"
-//   symbol: string;
+//   // I can't figure-out how to define a type for the JSON obj returned
+//   // by cmc because one of the fields starts with a #, and the compiler
+//   // doesn't allow that!!!  So I denied this as type "any", so then
+//   // compiler will figure-out what it is, and it seems to work.
+//   btcQuote: any;
+//   ethQuote: any;
+//   xrpQuote: any;
+//   adaQuote: any;
 //
-//   btcSymbol: string;
+//   fullResponse: any;
+//   quoteList: any[];
 //
-//   btc_id:      string;
-//   btc_name:    string;
-//   btc_symbol:  string;
-//   btc_rank:    string;
-//   btc_price_usd:  string;
-//   btc_price_btc:  string;
-//   btc_24h_volume_usd:  string;  // I added an underscore - you can't begin a symbol with a number
-//   btc_market_cap_usd:  string;
-//   btc_available_supply:  string;
-//   btc_total_supply:  string;
-//   btc_percent_change_1h:  string;
-//   btc_percent_change_24h:  string;
-//   btc_percent_change_7d:  string;
-//   btc_last_updated:  string;
+//   date = new Date(null);
+//
+//   btcLastUpdateTime: any;
+//   ethLastUpdateTime: any;
+//   xrpLastUpdateTime: any;
+//   adaLastUpdateTime: any;
 //
 //   constructor(private http: HttpClient) { }
 //
 //   ngOnInit() {
+//     this.getQuotesAndProccesThem();
 //   }
 //
-//   getQuotes(){
+//   processQuotes(){
+//       // console.log(this.ethQuote);
+//
+//       this.quoteList[0] = this.fullResponse[1];
+//       this.quoteList[1] = this.fullResponse[2];
+//       this.quoteList[2] = this.fullResponse[4];
+//       this.quoteList[3] = this.fullResponse[0];
+//   }
+//
+//   // I think that all processing of the quote data must be done in the context
+//   // this function, because the get operation is asynchronous, so you
+//   // don't know when it will return the data.
+//   getQuotesAndProccesThem(){
 //     // Note that this.http is created in the Constructor()
 //     console.log("Clicked.");
 //     this.http.get(this.cmcUrls[0]).subscribe(response => {
-//           // Read the specified field from the JSON response.
-//           // console.log(response.headers.get('X-Custom-Header'));
-//           // console.log(response.body);
-//           console.log(response);   // *** THIS WORKS ***
-//           this.results = response[0].name;
-//           // this.btcQuote.name=response[0].name;
-//           // this.btcQuote.symbol = response[0].symbol;
-//           this.btcSymbol = response[0].symbol;
-//           this.symbol = response[0].symbol;
 //
-//           this.btc_name = response[0].name;
-//           this.btc_symbol = response[0].symbol;
-//           this.btc_price_usd = response[0].price_usd;
-//           this.btc_percent_change_24h = response[0].percent_change_24h;
+//       this.btcQuote = response[0];
+//       this.ethQuote = response[1];
+//       this.xrpQuote = response[2];
+//       this.adaQuote = response[4];
 //
-//           //this.results = response[0];
-//         });
+//       this.fullResponse = response;
 //
-//     //console.log(this.results);
+//       // console.log(response);
+//       // console.log(this.fullResponse[0]);
+//       this.processQuotes();
+//     });
 //   }
-// }
+//
+}
 // wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 // wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 // wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-
-
-// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-// ***  This DOES NOT WORK!!!  ***
-// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-// import { Component, OnInit } from '@angular/core';
-// import { BrowserModule } from '@angular/platform-browser';
-// import { HttpClient } from '@angular/common/http';
-//
-// import { cmcJasonResponseItem } from '../shared/cmc-jason-response-item';
-//
-//
-// // interface cmcResponseInterface {
-// //   response: cmcJasonResponseItem[];
-// // }
-//
-// interface cmcResponseInterface {
-//   cmcResponse: Array<cmcResponseObject>;
-// }
-//
-// interface cmcResponseObject {
-//      id:      string;
-//      name:    string;
-//      symbol:  string;
-//      rank:    string;
-//      price_usd:  string;
-//      price_btc:  string;
-//      _24h_volume_usd:  string;  // I added an underscore - you can't begin a symbol with a number
-//      market_cap_usd:  string;
-//      available_supply:  string;
-//      total_supply:  string;
-//      percent_change_1h:  string;
-//      percent_change_24h:  string;
-//      percent_change_7d:  string;
-//      last_updated:  string;
-// }
-//
-// // interface cmcResponseObject {
-// //     id: string;
-// //     name: string;
-// //     symbol: string;
-// //     rank: string;
-// //     price_usd: string;
-// //     price_btc: string;
-// //     24h_volume_usd: string;
-// //     market_cap_usd: string;
-// //     available_supply: string;
-// //     total_supply: string;
-// //     percent_change_1h: string;
-// //     percent_change_24h: string;
-// //     percent_change_7d: string;
-// //     last_updated: string;
-// // }
-//
-// @Component({
-//   selector: 'app-stockquote',
-//   templateUrl: './stockquote.component.html',
-//   styleUrls: ['./stockquote.component.css']
-// })
-// export class StockquoteComponent implements OnInit {
-//
-//
-//   cmcUrls = [
-//     "https://api.coinmarketcap.com/v1/ticker/bitcoin/",
-//     "https://api.coinmarketcap.com/v1/ticker/ethereum/"
-//   ];
-//
-// //  results: string[];
-//   results: cmcResponseObject[];
-//
-//   testData : string;
-//
-//
-//   constructor(private http: HttpClient) { }
-//
-//   ngOnInit() {
-//   }
-//
-//   getQuotes(){
-//     // Note that this.http is created in the Constructor()
-//     console.log("Clicked.");
-//     //this.http.get<cmcResponseInterface>(this.cmcUrls[0]).subscribe(response => {
-//     this.http.get(this.cmcUrls[0]).subscribe(response => {
-//           // Read the specified field from the JSON response.
-//           // console.log(response.headers.get('X-Custom-Header'));
-//           // console.log(response.body);
-//           //console.log(response);   // *** THIS WORKS ***
-//           //this.results = response;
-//           this.results = response[0].name;
-//         });
-//
-//     console.log(this.results);
-//
-//     //this.testData = this.results[0].name;
-//
-//     // this.http
-//     //   //.get<MyJsonData>(this.urls[0], {observe: 'response'})
-//     //   .get(this.urls[0], {observe: 'response'})
-//     //   .subscribe(resp => {
-//     //     // Here, resp is of type HttpResponse<MyJsonData>.
-//     //     // You can inspect its headers:
-//     //     console.log(resp.headers.get('X-Custom-Header'));
-//     //     // And access the body directly, which is typed as MyJsonData as requested.
-//     //     console.log(resp.body.someField);
-//     //   });
-//   }
-// }
-
-// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-// This works
-//
-// import { Component, OnInit } from '@angular/core';
-// import { BrowserModule } from '@angular/platform-browser';
-// import { HttpClient } from '@angular/common/http';
-//
-// import { cmcJasonResponseItem } from '../shared/cmc-jason-response-item';
-//
-//
-// interface cmcResponseInterface {
-//   response: cmcJasonResponseItem[];
-// }
-//
-// @Component({
-//   selector: 'app-stockquote',
-//   templateUrl: './stockquote.component.html',
-//   styleUrls: ['./stockquote.component.css']
-// })
-// export class StockquoteComponent implements OnInit {
-//
-//
-//   cmcUrls = [
-//     "https://api.coinmarketcap.com/v1/ticker/bitcoin/",
-//     "https://api.coinmarketcap.com/v1/ticker/ethereum/"
-//   ];
-//
-//   results: string[];
-//
-//
-//
-//   constructor(private http: HttpClient) { }
-//
-//   ngOnInit() {
-//   }
-//
-//   getQuotes(){
-//     // Note that this.http is created in the Constructor()
-//     console.log("Clicked.");
-//     this.http.get(this.cmcUrls[0]).subscribe(response => {
-//           // Read the specified field from the JSON response.
-//           // console.log(response.headers.get('X-Custom-Header'));
-//           // console.log(response.body);
-//           console.log(response);   // *** THIS WORKS ***
-//           this.results = response[0].name;
-//           //this.results = response[0];
-//         });
-//
-//     console.log(this.results);
-//
-//     // this.http
-//     //   //.get<MyJsonData>(this.urls[0], {observe: 'response'})
-//     //   .get(this.urls[0], {observe: 'response'})
-//     //   .subscribe(resp => {
-//     //     // Here, resp is of type HttpResponse<MyJsonData>.
-//     //     // You can inspect its headers:
-//     //     console.log(resp.headers.get('X-Custom-Header'));
-//     //     // And access the body directly, which is typed as MyJsonData as requested.
-//     //     console.log(resp.body.someField);
-//     //   });
-//   }
-// }
