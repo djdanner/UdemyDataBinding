@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 
+import {Observable} from 'rxjs/Rx';
 import { cmcJasonResponseItem } from '../shared/cmc-jason-response-item';
 
 @Component({
@@ -26,7 +27,16 @@ export class StockquoteComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.getQuotesAndProccesThem();
+    // Start a timer to periodicallyt call the specified function.
+    // this.getQuotesAndProccesThem();
+    // param1 = delay the start of this timer in ms.
+    // param2 = period of timer in ms
+    // period = 5 min
+    let timer = Observable.timer(0, (1000 * 60 * 5));
+    timer.subscribe(t => {
+      this.getQuotesAndProccesThem();(t);
+      }
+    );
   }
 
   processQuotes(){
