@@ -21,6 +21,7 @@ export class StockquoteComponent implements OnInit {
 
   quoteList: cmcJasonResponseItem[] = [];
   fullResponse: any;
+  ethPriceUsd: number = 0;
 
   constructor(private http: HttpClient) { }
 
@@ -46,6 +47,7 @@ export class StockquoteComponent implements OnInit {
         this.quoteList[j] = tempItem;
         j++;
       }
+      this.ethPriceUsd = this.fullResponse[1].price_usd;
     }
 
     // console.log(this.quoteList);

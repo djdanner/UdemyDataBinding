@@ -6,23 +6,37 @@
 </div>
 
 <div class="container">
-  <table class="table table-striped">
+  <table class="table table-striped" style="font-size:24px;">
+  <!-- <table class="table table-striped" style="font-weight:bold"> -->
     <thead>
       <tr>
         <th>Name</th>
-        <th>Symbol</th>
+        <th>Sym</th>
         <th>Price</th>
-        <th>24 Hr Chg %</th>
-        <th>LastUpdate</th>
+        <th>$xxx/$ETH</th>
+        <th>24H Chg</th>
+        <th>Date</th>
+        <th>Time</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let quote of quoteList">
         <td>{{ quote.name }}</td>
         <td>{{ quote.symbol }}</td>
-        <td>{{ quote.price_usd }}</td>
-        <td>{{ quote.percent_change_24h }}</td>
-        <td>{{ quote.last_updated * 1000 | date:'yyyy-MM-dd __ HH:mm:ss Z'}}</td>
+
+        <!-- <td>{{ (quote.price_usd) | currency: 'USD':'symbol':'0.3'}}</td> -->
+        <!-- Pick the number of decimal places based on the magnitude of the price. -->
+        <td *ngIf="(quote.price_usd >= 2.0)">{{ (quote.price_usd) | currency: 'USD':'symbol':'0.0-0' }}</td>
+        <td *ngIf="(quote.price_usd < 2.0) && (quote.price_usd > 1.0)">{{ (quote.price_usd) | currency: 'USD':'symbol':'0.2-2' }}</td>
+        <td *ngIf="(quote.price_usd <= 1.0)">{{ (quote.price_usd) | currency: 'USD':'symbol':'0.3-3' }}</td>
+
+        <td>{{ (quote.price_usd / ethPriceUsd) | number: '0.7' }}</td>
+        <!-- <td *ngIf="quote.percent_change_24h < 0"   style="color:FireBrick; font-weight:bold">{{ (quote.percent_change_24h / 100) | percent: '0.1-1'  }}</td> -->
+        <td *ngIf="quote.percent_change_24h < 0"   style="color:Crimson; font-weight:bold">{{ (quote.percent_change_24h / 100) | percent: '0.1-1'  }}</td>
+        <td *ngIf="quote.percent_change_24h >= 0"  style="color:green; font-weight:bold">{{ (quote.percent_change_24h / 100) | percent: '0.1-1'  }}</td>
+        <td>{{ quote.last_updated * 1000 | date:'yyyy-MM-dd'}}</td>
+        <td>{{ quote.last_updated * 1000 | date:'HH:mm'}}</td>
+        <!-- <td>{{ quote.last_updated * 1000 | date:'yyyy-MM-dd __ HH:mm:ss Z'}}</td> -->
       </tr>
     </tbody>
   </table>
