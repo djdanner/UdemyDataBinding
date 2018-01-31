@@ -47,6 +47,7 @@ export class StockquoteComponent implements OnInit {
       if ( (i==0) || (i==1) || (i==2) || (i==4) ){
         // console.log(i, j);
         var tempItem = new cmcJasonResponseItem();
+        // var tempItem: any; // = new cmcJasonResponseItem();
 
         tempItem.name               = this.fullResponse[i].name;
         tempItem.symbol             = this.fullResponse[i].symbol;
@@ -325,7 +326,7 @@ export class StockquoteComponent implements OnInit {
 //     });
 //   }
 //
-}
+//}
 // wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 // wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 // wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
