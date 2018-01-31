@@ -24,16 +24,57 @@ export class StockquoteComponent implements OnInit {
   fullResponse: any;
   ethPriceUsd: number = 0;
 
+  timerSubscription: any;
+  timer1Subscription: any;
+
+  currentDate: any;
+  currentMinutes: number;
+
+
   constructor(private http: HttpClient) { }
 
+  checkForSynchIntervalAndUnsubscribeToTimer(){
+    console.log("Ticking!!!");
+    this.currentMinutes = this.currentDate.getMinutes();
+    if ((this.currentMinutes == 1) || ((this.currentMinutes % 6) == 0)){
+      // stop the timer.  we should also exit the while lopo.
+      this.timer1Subscription.unsubscribe();
+    }
+  }
+
   ngOnInit() {
+    this.getQuotesAndProccesThem();
+
+    // The cmc data is updated every 5 minutes, starting on the Hour
+    // (i.e., at 0, 5, 10 minutes, etc.).  But there is a 1 minute delay or so
+    // before that data is actually available via the web api, so it really
+    // changes at 1, 6, 11, etc., so synch-up the starting of our 5 minute timer
+    // with one of those intervals.
+    this.currentDate = new Date();
+    this.currentMinutes = this.currentDate.getMinutes();
+    console.log("Minutes = " + this.currentMinutes);
+
+    console.log("Before loop.");
+    console.log(((this.currentMinutes != 1) && ((this.currentMinutes % 6) != 0)));
+    while ((this.currentMinutes != 1) && ((this.currentMinutes % 6) != 0))
+    {
+      console.log("In while.");
+      console.log("Minutes = " + this.currentMinutes);
+      let timer1 = Observable.timer(0, (1000));
+      this.timer1Subscription = timer1.subscribe(t1 => {
+        this.checkForSynchIntervalAndUnsubscribeToTimer();(t1);
+        }
+      );
+    }
+    console.log("After loop.");
+
     // Start a timer to periodicallyt call the specified function.
     // this.getQuotesAndProccesThem();
     // param1 = delay the start of this timer in ms.
     // param2 = period of timer in ms
-    // period = 5 min
+    //          here period = 5 min
     let timer = Observable.timer(0, (1000 * 60 * 5));
-    timer.subscribe(t => {
+    this.timerSubscription = timer.subscribe(t => {
       this.getQuotesAndProccesThem();(t);
       }
     );
