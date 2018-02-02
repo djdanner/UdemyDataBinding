@@ -31,12 +31,13 @@
         <td *ngIf="(quote.price_usd < 2.0) && (quote.price_usd > 1.0)">{{ (quote.price_usd) | currency: 'USD':'symbol':'0.2-2' }}</td>
         <td *ngIf="(quote.price_usd <= 1.0)">{{ (quote.price_usd) | currency: 'USD':'symbol':'0.3-3' }}</td>
 
-        <td>{{ (quote.price_usd / ethPriceUsd) | number: '0.7' }}</td>
+        <td>{{ (quote.cmcPriceInEth) | number: '0.7' }}</td>
+
         <!-- <td *ngIf="quote.percent_change_24h < 0"   style="color:FireBrick; font-weight:bold">{{ (quote.percent_change_24h / 100) | percent: '0.1-1'  }}</td> -->
         <td *ngIf="quote.percent_change_24h < 0"   style="color:Crimson; font-weight:bold">{{ (quote.percent_change_24h / 100) | percent: '0.1-1'  }}</td>
         <td *ngIf="quote.percent_change_24h >= 0"  style="color:green; font-weight:bold">{{ (quote.percent_change_24h / 100) | percent: '0.1-1'  }}</td>
 
-        <td>{{ (quote.binanceEthPrice) | number: '0.7' }}</td>
+        <td>{{ (quote.binancePriceInEth) | number: '0.7' }}</td>
 
         <td>{{ quote.last_updated * 1000 | date:'yyyy-MM-dd'}}</td>
         <td>{{ quote.last_updated * 1000 | date:'HH:mm'}}</td>

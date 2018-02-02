@@ -122,6 +122,11 @@ export class StockquoteComponent implements OnInit {
       //   4 = ADA
       // TODO: Make this automatic rather than hard-coded
 
+      // Note, this is used in the if() below, but it only works for
+      // XRP and ADA b/c they have higher indexes.
+      // It doesn't work for BTC, but I don't care about that.
+      this.ethPriceUsd = this.cmcFullResponse[1].price_usd;
+
       if ( (i==0) || (i==1) || (i==2) || (i==4) ){
         // console.log(i, j);
         var tempItem = new cmcJasonResponseItem();
@@ -133,11 +138,16 @@ export class StockquoteComponent implements OnInit {
         tempItem.percent_change_24h = this.cmcFullResponse[i].percent_change_24h;
         tempItem.last_updated       = this.cmcFullResponse[i].last_updated;
 
+        // See note above.  This doesn't work for BTC.
+        tempItem.cmcPriceInEth       = this.cmcFullResponse[i].price_usd / this.ethPriceUsd;
+
         this.cmcQuoteList[j] = tempItem;
         j++;
       }
 
-      this.ethPriceUsd = this.cmcFullResponse[1].price_usd;
+      //(quote.price_usd / ethPriceUsd)
+      //cmcPriceInEth
+
     }
 
     // console.log(this.cmcQuoteList);
@@ -152,8 +162,9 @@ export class StockquoteComponent implements OnInit {
       // console.log(response);
       // this.binanceQuoteList[0] = response;
       this.binanceResponse = response;
-      this.cmcQuoteList[2].binanceEthPrice = this.binanceResponse.price;
+      this.cmcQuoteList[2].binancePriceInEth = this.binanceResponse.price;
       //console.log("this.binanceQuoteList[0]: " + this.binanceQuoteList[0]);
+      this.processBinanceQuotes(2);
     });
 
     // ADAETH
@@ -161,14 +172,20 @@ export class StockquoteComponent implements OnInit {
       // console.log(response);
       // this.binanceQuoteList[1] = response;
       this.binanceResponse = response;
-      this.cmcQuoteList[3].binanceEthPrice = this.binanceResponse.price;
+      this.cmcQuoteList[3].binancePriceInEth = this.binanceResponse.price;
+      this.processBinanceQuotes(1);
     });
 
-    this.processBinanceQuotes();
   }
 
-  processBinanceQuotes(){
-    
+  processBinanceQuotes(Ix: number){
+
+    var binPriceInEth : number = this.cmcQuoteList[Ix].binancePriceInEth;
+    var cmcPriceInEth : number = this.cmcQuoteList[Ix].binancePriceInEth;
+
+    //if
+    // binCmcPriceDeltaPercent
+
   }
 
 }  // class StockquoteComponent
