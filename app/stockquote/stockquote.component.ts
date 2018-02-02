@@ -34,8 +34,6 @@ export class StockquoteComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    // this.getQuotesAndProccesThem();
-
     // The cmc data is updated every 5 minutes, starting on the Hour
     // (i.e., at 0, 5, 10 minutes, etc.).  But there is a 1 minute delay or so
     // before that data is actually available via the web api, so it really
@@ -54,13 +52,6 @@ export class StockquoteComponent implements OnInit {
     //   delayTimerStartToSynchItWithWwwDataUpdates--;
     // }
 
-    // if (this.currentMinutes == 1){
-    //   delayTimerStartToSynchItWithWwwDataUpdates = 0;
-    // }
-    // else {
-    //   delayTimerStartToSynchItWithWwwDataUpdates = 6 - (this.currentMinutes % 5);
-    // }
-
     console.log("StartDelay = " + delayTimerStartToSynchItWithWwwDataUpdates);
 
     // Start a timer to periodicallyt call the specified function.
@@ -73,6 +64,8 @@ export class StockquoteComponent implements OnInit {
       this.getQuotesAndProccesThem();(t);
       }
     );
+
+    console.log("End of ngOnInit()");
   }
 
   processQuotes(){
