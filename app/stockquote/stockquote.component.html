@@ -13,8 +13,9 @@
         <th>Name</th>
         <th>Sym</th>
         <th>Price</th>
-        <th>$xxx/$ETH</th>
-        <th>24H Chg</th>
+        <th>CMC $xxx/$ETH</th>
+        <th>CMC 24H Chg</th>
+        <th>Bin $xxx/$ETH</th>
         <th>Date</th>
         <th>Time</th>
       </tr>
@@ -34,6 +35,9 @@
         <!-- <td *ngIf="quote.percent_change_24h < 0"   style="color:FireBrick; font-weight:bold">{{ (quote.percent_change_24h / 100) | percent: '0.1-1'  }}</td> -->
         <td *ngIf="quote.percent_change_24h < 0"   style="color:Crimson; font-weight:bold">{{ (quote.percent_change_24h / 100) | percent: '0.1-1'  }}</td>
         <td *ngIf="quote.percent_change_24h >= 0"  style="color:green; font-weight:bold">{{ (quote.percent_change_24h / 100) | percent: '0.1-1'  }}</td>
+
+        <td>{{ (quote.binanceEthPrice) | number: '0.7' }}</td>
+
         <td>{{ quote.last_updated * 1000 | date:'yyyy-MM-dd'}}</td>
         <td>{{ quote.last_updated * 1000 | date:'HH:mm'}}</td>
         <!-- <td>{{ quote.last_updated * 1000 | date:'yyyy-MM-dd __ HH:mm:ss Z'}}</td> -->

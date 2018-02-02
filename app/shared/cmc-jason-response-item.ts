@@ -26,6 +26,10 @@ export class cmcJasonResponseItem{
     percent_change_24h: number; // ex: 10.123
     percent_change_7d:  number; // ex: 10.123
     last_updated:       number; // ex: 12345678 // Unix Timestamp: UTC in seconds (not  mS) from 1970-01-01
+
+    // These fields DO NOT come from cmc.
+    // I added them to poulate UI.
+    binanceEthPrice:  number; // The price of this item in ETH (e.g., an ADA/ETH quote)
 }
 
 //         "id": "bitcoin",

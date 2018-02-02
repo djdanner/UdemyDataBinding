@@ -33,6 +33,8 @@ export class StockquoteComponent implements OnInit {
   binanceQuoteList: binanceJasonResponseItemPriceQuote[] = [];
 
   cmcFullResponse: any;
+  binanceFullResponse: any;
+
   ethPriceUsd: number = 0;
 
   timerSubscription: any;
@@ -84,6 +86,13 @@ export class StockquoteComponent implements OnInit {
 
     for (var i = 0; i <= 4 ; i++){
 
+      // As of 2/1/2018:
+      //   0 = BTC
+      //   1 = ETH
+      //   2 = XRP
+      //   4 = ADA
+      // TODO: Make this automatic rather than hard-coded
+
       if ( (i==0) || (i==1) || (i==2) || (i==4) ){
         // console.log(i, j);
         var tempItem = new cmcJasonResponseItem();
@@ -130,15 +139,20 @@ export class StockquoteComponent implements OnInit {
   }
 
   getBinanceQuotes(){
+    // console.log("Binance Quotes:");
+
+    // XRPETH
     this.http.get(this.binanceUrls[0]).subscribe(response => {
-      console.log("Binance Quotes:");
-      console.log(response);
-      this.binanceQuoteList[0] = response[0];
+      // console.log(response);
+      this.binanceQuoteList[0] = response;
+      this.cmcQuoteList[2].binanceEthPrice = response.price;
     });
 
+    // ADAETH
     this.http.get(this.binanceUrls[1]).subscribe(response => {
-      console.log("Binance Quotes:");
-      console.log(response);
+      // console.log(response);
+      this.binanceQuoteList[1] = response;
+      this.cmcQuoteList[3].binanceEthPrice = response.price;
     });
   }
 
