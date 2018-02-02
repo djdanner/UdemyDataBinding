@@ -33,6 +33,8 @@ export class StockquoteComponent implements OnInit {
   binanceQuoteList: binanceJasonResponseItemPriceQuote[] = [];
 
   cmcFullResponse: any;
+
+  binanceResponse: any;
   binanceFullResponse: any;
 
   ethPriceUsd: number = 0;
@@ -144,15 +146,18 @@ export class StockquoteComponent implements OnInit {
     // XRPETH
     this.http.get(this.binanceUrls[0]).subscribe(response => {
       // console.log(response);
-      this.binanceQuoteList[0] = response;
-      this.cmcQuoteList[2].binanceEthPrice = response.price;
+      // this.binanceQuoteList[0] = response;
+      this.binanceResponse = response;
+      this.cmcQuoteList[2].binanceEthPrice = this.binanceResponse.price;
+      //console.log("this.binanceQuoteList[0]: " + this.binanceQuoteList[0]);
     });
 
     // ADAETH
     this.http.get(this.binanceUrls[1]).subscribe(response => {
       // console.log(response);
-      this.binanceQuoteList[1] = response;
-      this.cmcQuoteList[3].binanceEthPrice = response.price;
+      // this.binanceQuoteList[1] = response;
+      this.binanceResponse = response;
+      this.cmcQuoteList[3].binanceEthPrice = this.binanceResponse.price;
     });
   }
 
