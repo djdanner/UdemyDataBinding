@@ -20,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let quote of quoteList">
+      <tr *ngFor="let quote of cmcQuoteList">
         <td style="font-size:18px;">{{ quote.name }}</td>
         <td>{{ quote.symbol }}</td>
 
@@ -100,7 +100,7 @@ This works 4!!!
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let quote of quoteList">
+      <tr *ngFor="let quote of cmcQuoteList">
         <td>{{ quote.name }}</td>
         <td>{{ quote.symbol }}</td>
         <td>{{ quote.price_usd }}</td>

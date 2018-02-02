@@ -3,7 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 
 import {Observable} from 'rxjs/Rx';
+
 import { cmcJasonResponseItem } from '../shared/cmc-jason-response-item';
+import { binanceJasonResponseItemPriceQuote } from '../shared/binance-jason-response-item-price-quote';
 
 @Component({
   selector: 'app-stockquote',
@@ -20,8 +22,17 @@ export class StockquoteComponent implements OnInit {
     "https://api.coinmarketcap.com/v1/ticker/ethereum/"
   ];
 
-  quoteList: cmcJasonResponseItem[] = [];
-  fullResponse: any;
+  binanceUrls = [
+    // The first call gets the Top 10 currencies by Market Capitalization.
+    // The other ones get a specific crypto currency.
+    "https://api.binance.com/api/v1/ticker/price?symbol=XRPETH",
+    "https://api.binance.com/api/v1/ticker/price?symbol=ADAETH"
+  ];
+
+  cmcQuoteList: cmcJasonResponseItem[] = [];
+  binanceQuoteList: binanceJasonResponseItemPriceQuote[] = [];
+
+  cmcFullResponse: any;
   ethPriceUsd: number = 0;
 
   timerSubscription: any;
@@ -78,19 +89,19 @@ export class StockquoteComponent implements OnInit {
         var tempItem = new cmcJasonResponseItem();
         // var tempItem: any; // = new cmcJasonResponseItem();
 
-        tempItem.name               = this.fullResponse[i].name;
-        tempItem.symbol             = this.fullResponse[i].symbol;
-        tempItem.price_usd          = this.fullResponse[i].price_usd;
-        tempItem.percent_change_24h = this.fullResponse[i].percent_change_24h;
-        tempItem.last_updated       = this.fullResponse[i].last_updated;
+        tempItem.name               = this.cmcFullResponse[i].name;
+        tempItem.symbol             = this.cmcFullResponse[i].symbol;
+        tempItem.price_usd          = this.cmcFullResponse[i].price_usd;
+        tempItem.percent_change_24h = this.cmcFullResponse[i].percent_change_24h;
+        tempItem.last_updated       = this.cmcFullResponse[i].last_updated;
 
-        this.quoteList[j] = tempItem;
+        this.cmcQuoteList[j] = tempItem;
         j++;
       }
-      this.ethPriceUsd = this.fullResponse[1].price_usd;
+      this.ethPriceUsd = this.cmcFullResponse[1].price_usd;
     }
 
-    // console.log(this.quoteList);
+    // console.log(this.cmcQuoteList);
   }
 
   // I think that all processing of the quote data must be done in the context
@@ -108,13 +119,41 @@ export class StockquoteComponent implements OnInit {
 
       console.log("Clicked. Minute: " + tempMinutes);
 
-      this.fullResponse = response;
+      this.cmcFullResponse = response;
 
       // console.log(response);
-      // console.log(this.fullResponse[0]);
+      // console.log(this.cmcFullResponse[0]);
       this.processQuotes();
     });
+
+    this.getBinanceQuotes();
   }
+
+  getBinanceQuotes(){
+    this.http.get(this.binanceUrls[0]).subscribe(response => {
+      console.log("Binance Quotes:");
+      console.log(response);
+      this.binanceQuoteList[0] = response[0];
+    });
+
+    this.http.get(this.binanceUrls[1]).subscribe(response => {
+      console.log("Binance Quotes:");
+      console.log(response);
+    });
+  }
+
+  // getBinanceQuotes(){
+  //   this.http.get(this.binanceUrls[0]).subscribe(response => {
+  //     console.log("Binance Quotes:");
+  //     console.log(response);
+  //   });
+  //
+  //   this.http.get(this.binanceUrls[1]).subscribe(response => {
+  //     console.log("Binance Quotes:");
+  //     console.log(response);
+  //   });
+  // }
+
 
 }
 // This WORKS 4 !!!
@@ -158,7 +197,7 @@ export class StockquoteComponent implements OnInit {
 //   //         "percent_change_7d": "-0.57",
 //   //         "last_updated": "1472762067"
 //
-//   //quoteList : cmcJasonResponseItem [];
+//   //cmcQuoteList : cmcJasonResponseItem [];
 //
 //     // id:                 string;  // ex:
 //     // name:               string;  // ex:
@@ -184,10 +223,10 @@ export class StockquoteComponent implements OnInit {
 //
 //   aaaTest: string;
 //
-//   // quoteList: any[];
-//   quoteList: cmcJasonResponseItem[] = [];
+//   // cmcQuoteList: any[];
+//   cmcQuoteList: cmcJasonResponseItem[] = [];
 //
-//   fullResponse: any;
+//   cmcFullResponse: any;
 //
 //   constructor(private http: HttpClient) { }
 //
@@ -205,33 +244,33 @@ export class StockquoteComponent implements OnInit {
 //           // console.log(i, j);
 //           var tempItem = new cmcJasonResponseItem();
 //
-//           tempItem.name               = this.fullResponse[i].name;
-//           tempItem.symbol             = this.fullResponse[i].symbol;
-//           tempItem.price_usd          = this.fullResponse[i].price_usd;
-//           tempItem.percent_change_24h = this.fullResponse[i].percent_change_24h;
-//           tempItem.last_updated       = this.fullResponse[i].last_updated;
+//           tempItem.name               = this.cmcFullResponse[i].name;
+//           tempItem.symbol             = this.cmcFullResponse[i].symbol;
+//           tempItem.price_usd          = this.cmcFullResponse[i].price_usd;
+//           tempItem.percent_change_24h = this.cmcFullResponse[i].percent_change_24h;
+//           tempItem.last_updated       = this.cmcFullResponse[i].last_updated;
 //
-//           this.quoteList[j] = tempItem;
+//           this.cmcQuoteList[j] = tempItem;
 //           j++;
 //         }
 //       }
 //
-//       console.log(this.quoteList);
+//       console.log(this.cmcQuoteList);
 //
-//       // tempItem.name               = this.fullResponse[1].name;
-//       // tempItem.symbol             = this.fullResponse[1].symbol;
-//       // tempItem.price_usd          = this.fullResponse[1].price_usd;
-//       // tempItem.percent_change_24h = this.fullResponse[1].percent_change_24h;
-//       // tempItem.last_updated       = this.fullResponse[1].last_updated;
+//       // tempItem.name               = this.cmcFullResponse[1].name;
+//       // tempItem.symbol             = this.cmcFullResponse[1].symbol;
+//       // tempItem.price_usd          = this.cmcFullResponse[1].price_usd;
+//       // tempItem.percent_change_24h = this.cmcFullResponse[1].percent_change_24h;
+//       // tempItem.last_updated       = this.cmcFullResponse[1].last_updated;
 //       //
-//       // this.quoteList[0] = tempItem;
+//       // this.cmcQuoteList[0] = tempItem;
 //       //
-//       // this.aaaTest = this.quoteList[0].name;
+//       // this.aaaTest = this.cmcQuoteList[0].name;
 //
-//       //this.quoteList[0].name = this.fullResponse[1].name;
-//       // this.quoteList[1] = this.fullResponse[2];
-//       // this.quoteList[2] = this.fullResponse[4];
-//       // this.quoteList[3] = this.fullResponse[0];
+//       //this.cmcQuoteList[0].name = this.cmcFullResponse[1].name;
+//       // this.cmcQuoteList[1] = this.cmcFullResponse[2];
+//       // this.cmcQuoteList[2] = this.cmcFullResponse[4];
+//       // this.cmcQuoteList[3] = this.cmcFullResponse[0];
 //   }
 //
 //   // I think that all processing of the quote data must be done in the context
@@ -247,10 +286,10 @@ export class StockquoteComponent implements OnInit {
 //       this.xrpQuote = response[2];
 //       this.adaQuote = response[4];
 //
-//       this.fullResponse = response;
+//       this.cmcFullResponse = response;
 //
 //       // console.log(response);
-//       // console.log(this.fullResponse[0]);
+//       // console.log(this.cmcFullResponse[0]);
 //       this.processQuotes();
 //     });
 //   }
@@ -316,8 +355,8 @@ export class StockquoteComponent implements OnInit {
 //   xrpQuote: any;
 //   adaQuote: any;
 //
-//   fullResponse: any;
-//   quoteList: any[];
+//   cmcFullResponse: any;
+//   cmcQuoteList: any[];
 //
 //   date = new Date(null);
 //
@@ -335,10 +374,10 @@ export class StockquoteComponent implements OnInit {
 //   processQuotes(){
 //       // console.log(this.ethQuote);
 //
-//       this.quoteList[0] = this.fullResponse[1];
-//       this.quoteList[1] = this.fullResponse[2];
-//       this.quoteList[2] = this.fullResponse[4];
-//       this.quoteList[3] = this.fullResponse[0];
+//       this.cmcQuoteList[0] = this.cmcFullResponse[1];
+//       this.cmcQuoteList[1] = this.cmcFullResponse[2];
+//       this.cmcQuoteList[2] = this.cmcFullResponse[4];
+//       this.cmcQuoteList[3] = this.cmcFullResponse[0];
 //   }
 //
 //   // I think that all processing of the quote data must be done in the context
@@ -354,10 +393,10 @@ export class StockquoteComponent implements OnInit {
 //       this.xrpQuote = response[2];
 //       this.adaQuote = response[4];
 //
-//       this.fullResponse = response;
+//       this.cmcFullResponse = response;
 //
 //       // console.log(response);
-//       // console.log(this.fullResponse[0]);
+//       // console.log(this.cmcFullResponse[0]);
 //       this.processQuotes();
 //     });
 //   }
