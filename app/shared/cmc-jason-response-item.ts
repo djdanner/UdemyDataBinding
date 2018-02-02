@@ -32,6 +32,7 @@ export class cmcJasonResponseItem{
     cmcPriceInEth: number;
     binancePriceInEth:  number; // The price of this item in ETH (e.g., an ADA/ETH quote)
     binCmcPriceDeltaPercent: number;
+    percentBinCmcPriceDelta: number;
 }
 
 //         "id": "bitcoin",

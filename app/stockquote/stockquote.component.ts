@@ -181,7 +181,19 @@ export class StockquoteComponent implements OnInit {
   processBinanceQuotes(Ix: number){
 
     var binPriceInEth : number = this.cmcQuoteList[Ix].binancePriceInEth;
-    var cmcPriceInEth : number = this.cmcQuoteList[Ix].binancePriceInEth;
+    var cmcPriceInEth : number = this.cmcQuoteList[Ix].cmcPriceInEth;
+
+    // Determine % difference between the Binance and CMC quotes.
+    if (binPriceInEth >= cmcPriceInEth){
+      // Binance is over-bought, so sell.
+      this.cmcQuoteList[Ix].percentBinCmcPriceDelta =
+        (binPriceInEth - cmcPriceInEth) / binPriceInEth;
+    } else {
+      // Binance is over-sold, so buy.
+      // Use negative sign to indicate over sold.
+      this.cmcQuoteList[Ix].percentBinCmcPriceDelta =
+        -((binPriceInEth - cmcPriceInEth) / binPriceInEth);
+    }
 
     //if
     // binCmcPriceDeltaPercent
