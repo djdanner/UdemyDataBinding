@@ -53,7 +53,7 @@ export class StockquoteComponent implements OnInit {
     // if (delayTimerStartToSynchItWithWwwDataUpdates != 0){
     //   delayTimerStartToSynchItWithWwwDataUpdates--;
     // }
-    
+
     // if (this.currentMinutes == 1){
     //   delayTimerStartToSynchItWithWwwDataUpdates = 0;
     // }
@@ -113,7 +113,7 @@ export class StockquoteComponent implements OnInit {
       var tempDate = new Date();
       var tempMinutes = tempDate.getMinutes();
 
-      console.log("Clicked. Minute: " tempMinutes);
+      console.log("Clicked. Minute: " + tempMinutes);
 
       this.fullResponse = response;
 
