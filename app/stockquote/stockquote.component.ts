@@ -83,7 +83,34 @@ export class StockquoteComponent implements OnInit {
     console.log("End of ngOnInit()");
   }
 
-  processQuotes(){
+  // I think that all processing of the quote data must be done in the context
+  // this function, because the get operation is asynchronous, so you
+  // don't know when it will return the data.
+  getQuotesAndProccesThem(){
+    this.getCmcQuotes();
+    this.getBinanceQuotes();
+  }
+
+  getCmcQuotes(){
+    // Note that this.http is created in the Constructor()
+    this.http.get(this.cmcUrls[0]).subscribe(response => {
+
+      // We could also use the existing currentDate variable, but have to
+      // force it to get the ceuurent time.
+      var tempDate = new Date();
+      var tempMinutes = tempDate.getMinutes();
+
+      console.log("Clicked. Minute: " + tempMinutes);
+
+      this.cmcFullResponse = response;
+
+      this.processCmcQuotes();
+    });
+  }
+
+  // Note that this must be called within the context of the associated
+  // http response processing.
+  processCmcQuotes(){
     var j = 0;
 
     for (var i = 0; i <= 4 ; i++){
@@ -109,38 +136,15 @@ export class StockquoteComponent implements OnInit {
         this.cmcQuoteList[j] = tempItem;
         j++;
       }
+
       this.ethPriceUsd = this.cmcFullResponse[1].price_usd;
     }
 
     // console.log(this.cmcQuoteList);
   }
 
-  // I think that all processing of the quote data must be done in the context
-  // this function, because the get operation is asynchronous, so you
-  // don't know when it will return the data.
-  getQuotesAndProccesThem(){
-    // Note that this.http is created in the Constructor()
-
-    this.http.get(this.cmcUrls[0]).subscribe(response => {
-
-      // We could also use the existing currentDate variable, but have to
-      // force it to get the ceuurent time.
-      var tempDate = new Date();
-      var tempMinutes = tempDate.getMinutes();
-
-      console.log("Clicked. Minute: " + tempMinutes);
-
-      this.cmcFullResponse = response;
-
-      // console.log(response);
-      // console.log(this.cmcFullResponse[0]);
-      this.processQuotes();
-    });
-
-    this.getBinanceQuotes();
-  }
-
   getBinanceQuotes(){
+    // Note that this.http is created in the Constructor()
     // console.log("Binance Quotes:");
 
     // XRPETH
@@ -159,22 +163,16 @@ export class StockquoteComponent implements OnInit {
       this.binanceResponse = response;
       this.cmcQuoteList[3].binanceEthPrice = this.binanceResponse.price;
     });
+
+    this.processBinanceQuotes();
   }
 
-  // getBinanceQuotes(){
-  //   this.http.get(this.binanceUrls[0]).subscribe(response => {
-  //     console.log("Binance Quotes:");
-  //     console.log(response);
-  //   });
-  //
-  //   this.http.get(this.binanceUrls[1]).subscribe(response => {
-  //     console.log("Binance Quotes:");
-  //     console.log(response);
-  //   });
-  // }
+  processBinanceQuotes(){
+    
+  }
 
+}  // class StockquoteComponent
 
-}
 // This WORKS 4 !!!
 // wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 // wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
@@ -253,7 +251,7 @@ export class StockquoteComponent implements OnInit {
 //     this.getQuotesAndProccesThem();
 //   }
 //
-//   processQuotes(){
+//   processCmcQuotes(){
 //       // console.log(this.ethQuote);
 //       var j = 0;
 //
@@ -309,7 +307,7 @@ export class StockquoteComponent implements OnInit {
 //
 //       // console.log(response);
 //       // console.log(this.cmcFullResponse[0]);
-//       this.processQuotes();
+//       this.processCmcQuotes();
 //     });
 //   }
 //
@@ -390,7 +388,7 @@ export class StockquoteComponent implements OnInit {
 //     this.getQuotesAndProccesThem();
 //   }
 //
-//   processQuotes(){
+//   processCmcQuotes(){
 //       // console.log(this.ethQuote);
 //
 //       this.cmcQuoteList[0] = this.cmcFullResponse[1];
@@ -416,7 +414,7 @@ export class StockquoteComponent implements OnInit {
 //
 //       // console.log(response);
 //       // console.log(this.cmcFullResponse[0]);
-//       this.processQuotes();
+//       this.processCmcQuotes();
 //     });
 //   }
 //

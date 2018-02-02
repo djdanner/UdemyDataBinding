@@ -30,6 +30,7 @@ export class cmcJasonResponseItem{
     // These fields DO NOT come from cmc.
     // I added them to poulate UI.
     binanceEthPrice:  number; // The price of this item in ETH (e.g., an ADA/ETH quote)
+    binCmcPriceDeltaPercent: number;
 }
 
 //         "id": "bitcoin",
