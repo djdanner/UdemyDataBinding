@@ -81,6 +81,19 @@ export class StockquoteComponent implements OnInit {
     );
 
     console.log("End of ngOnInit()");
+
+    this.audio = new Audio();
+    //this.audio.src = "C:/\Users/\Dan\/Documents/\___UdemyExamples/\60-Data-Binding/\cmp-databinding-start/\src/\app\/sounds/\ding-01.mp3";
+    //this.audio.src = "../sounds/ding-01.mp3";
+    //this.audio.src = "src/app/sounds/ding-01.mp3";
+    this.audio.src ="http://resources.schoolscience.co.uk/CDA/CD/files/sound/decorativelamp.mp3";
+    //this.audio.src = "ding-01.mp3";
+    this.audio.load();
+    //this.audio.play();
+  }
+
+  playSound(){
+    this.audio.play();
   }
 
   // I think that all processing of the quote data must be done in the context
@@ -203,9 +216,16 @@ export class StockquoteComponent implements OnInit {
         -((binPriceInEth - cmcPriceInEth) / binPriceInEth);
     }
 
-    //if
-    // binCmcPriceDeltaPercent
+    if (Ix == 3){
+      // ADA
+      console.log("AAA: " + this.cmcQuoteList[Ix].percentBinCmcPriceDelta);
 
+      // If Skew >= 6%
+      if ((this.cmcQuoteList[Ix].percentBinCmcPriceDelta >= 0.06) ||
+          (this.cmcQuoteList[Ix].percentBinCmcPriceDelta <= -0.06)){
+            this.playSound();
+          }
+    }
   }
 
 }  // class StockquoteComponent
