@@ -147,7 +147,6 @@ export class StockquoteComponent implements OnInit {
 
       //(quote.price_usd / ethPriceUsd)
       //cmcPriceInEth
-
     }
 
     // console.log(this.cmcQuoteList);
@@ -173,6 +172,15 @@ export class StockquoteComponent implements OnInit {
       // this.binanceQuoteList[1] = response;
       this.binanceResponse = response;
       this.cmcQuoteList[3].binancePriceInEth = this.binanceResponse.price;
+      this.processBinanceQuotes(3);
+
+      // Set these to some value so they don't blow-up and don't
+      // mess-up the display.
+      this.cmcQuoteList[0].binancePriceInEth = this.cmcQuoteList[0].cmcPriceInEth;
+      this.cmcQuoteList[1].binancePriceInEth = 1;
+
+      // Set these to some value so they don't blow-up.
+      this.processBinanceQuotes(0);
       this.processBinanceQuotes(1);
     });
 
@@ -180,8 +188,8 @@ export class StockquoteComponent implements OnInit {
 
   processBinanceQuotes(Ix: number){
 
-    var binPriceInEth : number = this.cmcQuoteList[Ix].binancePriceInEth;
-    var cmcPriceInEth : number = this.cmcQuoteList[Ix].cmcPriceInEth;
+    var binPriceInEth = this.cmcQuoteList[Ix].binancePriceInEth;
+    var cmcPriceInEth = this.cmcQuoteList[Ix].cmcPriceInEth;
 
     // Determine % difference between the Binance and CMC quotes.
     if (binPriceInEth >= cmcPriceInEth){
