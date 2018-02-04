@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 
@@ -58,6 +58,8 @@ export class StockquoteComponent implements OnInit {
 
   constructor(private http: HttpClient) { }
 
+  @Output('quoteChangeEvent')
+  quoteChangeEvent: EventEmitter<cmcJasonResponseItem[][]> = new EventEmitter<cmcJasonResponseItem[][]>();
 
   ngOnInit() {
 
@@ -115,6 +117,7 @@ export class StockquoteComponent implements OnInit {
     this.getCmcQuotes();
     this.getBinanceQuotes();
     this.updateQuoteHistory();
+    this.quoteChangeEvent.emit(this.allQuoteHistory);
   }
 
   getCmcQuotes(){
