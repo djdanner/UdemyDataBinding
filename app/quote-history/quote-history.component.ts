@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+
+import { cmcJasonResponseItem } from '../shared/cmc-jason-response-item';
 
 @Component({
   selector: 'app-quote-history',
@@ -6,6 +8,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./quote-history.component.css']
 })
 export class QuoteHistoryComponent implements OnInit {
+  @Input('quoteChangeEvent')
+    myQuoteHistory: cmcJasonResponseItem[][];
+
+    oneQuoteHistoryEntry: cmcJasonResponseItem[] = cmcJasonResponseItem[0];
 
   constructor() { }
 
