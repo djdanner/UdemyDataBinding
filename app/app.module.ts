@@ -11,6 +11,8 @@ import { StockquoteComponent } from './stockquote/stockquote.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MessagesComponent } from './messages/messages.component';
 import { MessageService } from './message.service';
+import { AdaHistoryComponent } from './ada-history/ada-history.component';
+import { QuoteHistoryComponent } from './quote-history/quote-history.component';
 
 
 
@@ -20,7 +22,9 @@ import { MessageService } from './message.service';
     CockpitComponent,
     MessagesComponent,
     ServerElementComponent,
-    StockquoteComponent
+    StockquoteComponent,
+    AdaHistoryComponent,
+    QuoteHistoryComponent
   ],
   imports: [
     AppRoutingModule,

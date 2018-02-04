@@ -7,6 +7,7 @@ import { RouterModule, Routes } from '@angular/router';
 // import { HeroesComponent} from './heroes/heroes.component';
 // import { DashboardComponent } from './dashboard/dashboard.component';
 import { StockquoteComponent } from './stockquote/stockquote.component';
+import { QuoteHistoryComponent } from './quote-history/quote-history.component';
 
 const routes: Routes = [
   // This route redirects a URL that fully matches the empty path to the route whose path is '/dashboard'.
@@ -15,10 +16,11 @@ const routes: Routes = [
   // { path: 'dashboard', component: DashboardComponent },
   // { path: 'detail/:id', component: HeroDetailComponent },
   // { path: 'heroes', component: HeroesComponent },
-  
+
   // This first path defines the Default Component that will be displayed on the Home Page.
   { path: '', redirectTo: '/stockquote', pathMatch: 'full' },
   { path: 'stockquote', component: StockquoteComponent },
+  { path: 'quote-history', component: QuoteHistoryComponent },
 ]
 
 @NgModule({
