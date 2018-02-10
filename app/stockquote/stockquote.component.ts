@@ -45,11 +45,25 @@ export class StockquoteComponent implements OnInit {
   currentDate = new Date();
   currentMinutes: number;
 
+  // @Output('quoteChangeEvent')
+  // quoteChangeEvent: EventEmitter<cmcJasonResponseItem[][]> = new EventEmitter<cmcJasonResponseItem[][]>();
+
+  // allQuoteHistory: cmcJasonResponseItem[][] = [];
+
+  // @Output()
+  // allQuoteHistory: EventEmitter<cmcJasonResponseItem[][]> = new EventEmitter<cmcJasonResponseItem[][]>();
+
+  @Output()
   allQuoteHistory: cmcJasonResponseItem[][] = [];
+
+  quoteChangeEvent: EventEmitter<cmcJasonResponseItem[][]> = new EventEmitter<cmcJasonResponseItem[][]>();
+  adaQuoteChangeEvent: EventEmitter<cmcJasonResponseItem[]> = new EventEmitter<cmcJasonResponseItem[]>();
 
   btcQuoteHistory: cmcJasonResponseItem[] = [];
   ethQuoteHistory: cmcJasonResponseItem[] = [];
   xrpQuoteHistory: cmcJasonResponseItem[] = [];
+
+  @Output()
   adaQuoteHistory: cmcJasonResponseItem[] = [];
 
   quoteHistoryIx: number = 0;
@@ -58,8 +72,6 @@ export class StockquoteComponent implements OnInit {
 
   constructor(private http: HttpClient) { }
 
-  @Output('quoteChangeEvent')
-  quoteChangeEvent: EventEmitter<cmcJasonResponseItem[][]> = new EventEmitter<cmcJasonResponseItem[][]>();
 
   ngOnInit() {
 
@@ -117,7 +129,6 @@ export class StockquoteComponent implements OnInit {
     this.getCmcQuotes();
     this.getBinanceQuotes();
     this.updateQuoteHistory();
-    this.quoteChangeEvent.emit(this.allQuoteHistory);
   }
 
   getCmcQuotes(){
@@ -159,7 +170,6 @@ export class StockquoteComponent implements OnInit {
       if ( (i==0) || (i==1) || (i==2) || (i==4) ){
         // console.log(i, j);
         var tempItem = new cmcJasonResponseItem();
-        // var tempItem: any; // = new cmcJasonResponseItem();
 
         tempItem.name               = this.cmcFullResponse[i].name;
         tempItem.symbol             = this.cmcFullResponse[i].symbol;
@@ -171,14 +181,15 @@ export class StockquoteComponent implements OnInit {
         tempItem.cmcPriceInEth       = this.cmcFullResponse[i].price_usd / this.ethPriceUsd;
 
         this.cmcQuoteList[j] = tempItem;
+        //console.log(this.cmcQuoteList[j].name);
         j++;
+
+        if ( (i==4) ){
+          this.adaQuoteHistory[this.quoteHistoryIx] = tempItem;
+          this.quoteHistoryIx++;
+        }
       }
-
-      //(quote.price_usd / ethPriceUsd)
-      //cmcPriceInEth
     }
-
-    // console.log(this.cmcQuoteList);
   }
 
   getBinanceQuotes(){
@@ -216,7 +227,6 @@ export class StockquoteComponent implements OnInit {
   }
 
   processBinanceQuotes(Ix: number){
-
     var binPriceInEth = this.cmcQuoteList[Ix].binancePriceInEth;
     var cmcPriceInEth = this.cmcQuoteList[Ix].cmcPriceInEth;
 
@@ -229,7 +239,7 @@ export class StockquoteComponent implements OnInit {
       // Binance is over-sold, so buy.
       // Use negative sign to indicate over sold.
       this.cmcQuoteList[Ix].percentBinCmcPriceDelta =
-        -((binPriceInEth - cmcPriceInEth) / binPriceInEth);
+        -((cmcPriceInEth- binPriceInEth) / binPriceInEth);
     }
 
     if ((Ix == 2) || (Ix == 3)){
@@ -243,17 +253,49 @@ export class StockquoteComponent implements OnInit {
       }
     }
 
+    // if ( (Ix == 4) ){
+    //   this.adaQuoteHistory[this.quoteHistoryIx] = this.cmcQuoteList[Ix];
+    //   this.quoteHistoryIx++;
+    // }
+
   }
 
   updateQuoteHistory(){
-    this.btcQuoteHistory[this.quoteHistoryIx] = this.cmcQuoteList[0];
-    this.ethQuoteHistory[this.quoteHistoryIx] = this.cmcQuoteList[1];
-    this.xrpQuoteHistory[this.quoteHistoryIx] = this.cmcQuoteList[2];
-    this.adaQuoteHistory[this.quoteHistoryIx] = this.cmcQuoteList[4];
-
-    this.allQuoteHistory[this.quoteHistoryIx] = this.cmcQuoteList;
-
-    this.quoteHistoryIx++;
+    // this.btcQuoteHistory[this.quoteHistoryIx] = this.cmcQuoteList[0];
+    // this.ethQuoteHistory[this.quoteHistoryIx] = this.cmcQuoteList[1];
+    // this.xrpQuoteHistory[this.quoteHistoryIx] = this.cmcQuoteList[2];
+    //
+    // var tempItem = new cmcJasonResponseItem();
+    //
+    // // this.adaQuoteHistory[this.quoteHistoryIx] = obj;
+    // //
+    // // this.adaQuoteHistory[this.quoteHistoryIx].name               = this.cmcQuoteList[i].name;
+    // // this.adaQuoteHistory[this.quoteHistoryIx].symbol             = this.cmcQuoteList[i].symbol;
+    // // this.adaQuoteHistory[this.quoteHistoryIx].price_usd          = this.cmcQuoteList[i].price_usd;
+    // // this.adaQuoteHistory[this.quoteHistoryIx].percent_change_24h = this.cmcQuoteList[i].percent_change_24h;
+    // // this.adaQuoteHistory[this.quoteHistoryIx].last_updated       = this.cmcQuoteList[i].last_updated;
+    //
+    // console.log(this.cmcQuoteList[3].name);
+    //
+    // tempItem.name               = this.cmcQuoteList[3].name;
+    // tempItem.symbol             = this.cmcQuoteList[3].symbol;
+    // tempItem.price_usd          = this.cmcQuoteList[3].price_usd;
+    // tempItem.percent_change_24h = this.cmcQuoteList[3].percent_change_24h;
+    // tempItem.last_updated       = this.cmcQuoteList[3].last_updated;
+    //
+    // tempItem.cmcPriceInEth      = this.cmcQuoteList[3].cmcPriceInEth;
+    //
+    // this.adaQuoteHistory[this.quoteHistoryIx] = tempItem;
+    //
+    // this.allQuoteHistory[this.quoteHistoryIx] = this.cmcQuoteList;
+    //
+    // this.quoteChangeEvent.emit(this.allQuoteHistory);
+    // this.adaQuoteChangeEvent.emit(this.adaQuoteHistory);
+    //
+    // console.log("quoteHistoryIx: " + this.quoteHistoryIx);
+    // //console.log("allQuoteHistory: " + this.allQuoteHistory[this.quoteHistoryIx]);
+    //
+    // this.quoteHistoryIx++;
   }
 
 

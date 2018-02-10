@@ -1,6 +1,7 @@
 <p>
   quote-history works!
 </p>
+
 <div class="container">
   <table class="table table-striped" style="font-size:24px;">
   <!-- <table class="table table-striped" style="font-weight:bold"> -->
@@ -18,7 +19,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let quote of oneQuoteHistoryEntry">
+      <tr *ngFor="let quote of adaQuoteHistory">
         <td style="font-size:18px;">{{ quote.name }}</td>
         <td>{{ quote.symbol }}</td>
 
@@ -47,3 +48,43 @@
     </tbody>
   </table>
 </div>
+
+
+<!-- ==============================================================================
+DOES NOT work
+<div class="container">
+  <table class="table table-striped" style="font-size:24px;">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Sym</th>
+        <th>Price</th>
+        <th>Bin $xxx/$ETH</th>
+        <th>CMC $xxx/$ETH</th>
+        <th>Skew</th>
+        <th>Date</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let quote of oneQuoteHistoryEntry">
+        <td style="font-size:18px;">{{ quote.name }}</td>
+        <td>{{ quote.symbol }}</td>
+
+        <td *ngIf="(quote.price_usd >= 2.0)">{{ (quote.price_usd) | currency: 'USD':'symbol':'0.0-0' }}</td>
+        <td *ngIf="(quote.price_usd < 2.0) && (quote.price_usd > 1.0)">{{ (quote.price_usd) | currency: 'USD':'symbol':'0.2-2' }}</td>
+        <td *ngIf="(quote.price_usd <= 1.0)">{{ (quote.price_usd) | currency: 'USD':'symbol':'0.3-3' }}</td>
+
+        <td>{{ (quote.binancePriceInEth) | number: '0.7' }}</td>
+        <td>{{ (quote.cmcPriceInEth) | number: '0.7' }}</td>
+
+        <td *ngIf="quote.percentBinCmcPriceDelta == 0"   >{{ (quote.percentBinCmcPriceDelta) | percent: '0.1-1'  }}</td>
+        <td *ngIf="quote.percentBinCmcPriceDelta < 0"   style="color:Crimson; font-weight:bold">{{ (quote.percentBinCmcPriceDelta) | percent: '0.1-1'  }}</td>
+        <td *ngIf="quote.percentBinCmcPriceDelta > 0"  style="color:green; font-weight:bold">{{ (quote.percentBinCmcPriceDelta) | percent: '0.1-1'  }}</td>
+
+        <td>{{ quote.last_updated * 1000 | date:'yyyy-MM-dd'}}</td>
+        <td>{{ quote.last_updated * 1000 | date:'HH:mm'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div> -->

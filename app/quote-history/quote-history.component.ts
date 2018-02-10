@@ -8,10 +8,13 @@ import { cmcJasonResponseItem } from '../shared/cmc-jason-response-item';
   styleUrls: ['./quote-history.component.css']
 })
 export class QuoteHistoryComponent implements OnInit {
-  @Input('quoteChangeEvent')
-    myQuoteHistory: cmcJasonResponseItem[][];
+  @Input()
+  allQuoteHistory: cmcJasonResponseItem[][];
 
-    oneQuoteHistoryEntry: cmcJasonResponseItem[] = cmcJasonResponseItem[0];
+  @Input()
+  adaQuoteHistory: cmcJasonResponseItem[];
+
+  //oneQuoteHistoryEntry: cmcJasonResponseItem[] = this.allQuoteHistory[0];
 
   constructor() { }
 
