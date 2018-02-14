@@ -153,13 +153,13 @@ export class StockquoteComponent implements OnInit {
   processCmcQuotes(){
     var j = 0;
 
-    for (var i = 0; i <= 4 ; i++){
+    for (var i = 0; i <= 5 ; i++){
 
       // As of 2/1/2018:
       //   0 = BTC
       //   1 = ETH
       //   2 = XRP
-      //   4 = ADA
+      //   5 = ADA
       // TODO: Make this automatic rather than hard-coded
 
       // Note, this is used in the if() below, but it only works for
@@ -167,7 +167,7 @@ export class StockquoteComponent implements OnInit {
       // It doesn't work for BTC, but I don't care about that.
       this.ethPriceUsd = this.cmcFullResponse[1].price_usd;
 
-      if ( (i==0) || (i==1) || (i==2) || (i==4) ){
+      if ( (i==0) || (i==1) || (i==2) || (i==5) ){
         // console.log(i, j);
         var tempItem = new cmcJasonResponseItem();
 
@@ -184,7 +184,7 @@ export class StockquoteComponent implements OnInit {
         //console.log(this.cmcQuoteList[j].name);
         j++;
 
-        if ( (i==4) ){
+        if ( (i==5) ){
           this.adaQuoteHistory[this.quoteHistoryIx] = tempItem;
           this.quoteHistoryIx++;
         }
